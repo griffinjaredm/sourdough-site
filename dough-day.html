@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourdough Starter - Magy's Bakes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Playfair+Display&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Magy's Bakes</a>
+            <nav class="navbar">
+                <a href="index..html">Home</a>
+                <a href="dough-day.html">Dough Day</a>
+                <a href="recipes.html">Recipes</a>
+                <a href="dough-day.html">Media</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Sourdough Orders from Hotplate</h1>
+            
+            <section class="hero">
+                <img src="/images/dough-in-pan.jpg" alt="Sourdough starter on a rustic kitchen table">
+                <p>Welcome to the Sourdough Orders from Hoteplate Converter! This tool helps you process your CSV orders and calculate the ingredients needed for your delicious sourdough breads.</p>
+            </section>
+            
+            <section class="file-upload">
+                <h2>Upload Your Order CSV</h2>
+                <p>Select your CSV file containing the order details to get started.</p>
+                <div class="file-input-container">
+                    <label for="csvFile" class="file-input-label">Choose CSV File</label>
+                    <input type="file" id="csvFile" accept=".csv">
+                    <span id="fileName"></span>
+                </div>
+                <button id="processButton" class="process-btn" disabled>Process Orders</button>
+            </section>
+            
+            <section class="results">
+                <h2>Baking Summary</h2>
+                <div id="output" class="output-container"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Magy's Bakes. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>
