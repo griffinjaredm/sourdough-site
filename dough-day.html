@@ -37,16 +37,19 @@
         .quantity {
             font-weight: bold;
         }
-        #total {
+        #selected-breads, #total-ingredients {
             font-weight: bold;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
     <h1>Sourdough Bread Calculator</h1>
     <div class="bread-cards" id="breadCards"></div>
+    <h2>Selected Breads:</h2>
+    <div id="selected-breads"></div>
     <h2>Total Ingredients:</h2>
-    <pre id="total"></pre>
+    <div id="total-ingredients"></div>
 
     <script>
         const breads = [
@@ -65,7 +68,8 @@
         };
 
         const breadCards = document.getElementById('breadCards');
-        const totalOutput = document.getElementById('total');
+        const selectedBreadsOutput = document.getElementById('selected-breads');
+        const totalIngredientsOutput = document.getElementById('total-ingredients');
         const quantities = {};
 
         breads.forEach(bread => {
@@ -86,10 +90,23 @@
         function changeQuantity(bread, change) {
             quantities[bread] = Math.max(0, quantities[bread] + change);
             document.getElementById(`quantity-${bread}`).textContent = quantities[bread];
-            updateTotal();
+            updateOutputs();
         }
 
-        function updateTotal() {
+        function updateOutputs() {
+            updateSelectedBreads();
+            updateTotalIngredients();
+        }
+
+        function updateSelectedBreads() {
+            const selectedBreads = Object.entries(quantities)
+                .filter(([_, quantity]) => quantity > 0)
+                .map(([bread, quantity]) => `${bread}: ${quantity}`)
+                .join('\n');
+            selectedBreadsOutput.textContent = selectedBreads || 'No breads selected';
+        }
+
+        function updateTotalIngredients() {
             const total = {
                 water: 0,
                 starter: 0,
@@ -103,7 +120,7 @@
                 }
             }
 
-            totalOutput.textContent = Object.entries(total)
+            totalIngredientsOutput.textContent = Object.entries(total)
                 .map(([ingredient, amount]) => `${ingredient}: ${amount}g`)
                 .join('\n');
         }
