@@ -3,57 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sourdough Starter - Magy's Bakes</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Playfair+Display&display=swap" rel="stylesheet"> 
+    <title>Sourdough Bread Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .bread-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .bread-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 220px;
+        }
+        .quantity-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .quantity-controls button {
+            font-size: 16px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+        .quantity {
+            font-weight: bold;
+        }
+        #total {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <a href="#" class="logo">Magy's Bakes</a>
-            <nav class="navbar">
-                <a href="index..html">Home</a>
-                <a href="dough-day.html">Dough Day</a>
-                <a href="recipes.html">Recipes</a>
-                <a href="dough-day.html">Media</a>
-                
-            </nav>
-        </div>
-    </header>
+    <h1>Sourdough Bread Calculator</h1>
+    <div class="bread-cards" id="breadCards"></div>
+    <h2>Total Ingredients:</h2>
+    <pre id="total"></pre>
 
-    <main class="main-content">
-        <div class="container">
-            <h1 class="page-title">Sourdough Orders from Hotplate</h1>
-            
-            <section class="hero">
-                <img src="/images/dough-in-pan.jpg" alt="Sourdough starter on a rustic kitchen table">
-                <p>Welcome to the Sourdough Orders from Hoteplate Converter! This tool helps you process your CSV orders and calculate the ingredients needed for your delicious sourdough breads.</p>
-            </section>
-            
-            <section class="file-upload">
-                <h2>Upload Your Order CSV</h2>
-                <p>Select your CSV file containing the order details to get started.</p>
-                <div class="file-input-container">
-                    <label for="csvFile" class="file-input-label">Choose CSV File</label>
-                    <input type="file" id="csvFile" accept=".csv">
-                    <span id="fileName"></span>
+    <script>
+        const breads = [
+            "Sourdough Pumpkin",
+            "Traditional Sourdough Bread",
+            "Jalapeño Cheddar Sourdough Bread",
+            "Chocolate Chip Sourdough Bread",
+            "Olive Sourdough Bread"
+        ];
+
+        const baseIngredients = {
+            water: 350,
+            starter: 90,
+            flour: 500,
+            salt: 11
+        };
+
+        const breadCards = document.getElementById('breadCards');
+        const totalOutput = document.getElementById('total');
+        const quantities = {};
+
+        breads.forEach(bread => {
+            quantities[bread] = 0;
+            const card = document.createElement('div');
+            card.className = 'bread-card';
+            card.innerHTML = `
+                <h3>${bread}</h3>
+                <div class="quantity-controls">
+                    <button onclick="changeQuantity('${bread}', -1)">-</button>
+                    <span class="quantity" id="quantity-${bread}">0</span>
+                    <button onclick="changeQuantity('${bread}', 1)">+</button>
                 </div>
-                <button id="processButton" class="process-btn" disabled>Process Orders</button>
-            </section>
-            
-            <section class="results">
-                <h2>Baking Summary</h2>
-                <div id="output" class="output-container"></div>
-            </section>
-        </div>
-    </main>
+            `;
+            breadCards.appendChild(card);
+        });
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Magy's Bakes. All rights reserved.</p>
-        </div>
-    </footer>
+        function changeQuantity(bread, change) {
+            quantities[bread] = Math.max(0, quantities[bread] + change);
+            document.getElementById(`quantity-${bread}`).textContent = quantities[bread];
+            updateTotal();
+        }
 
-    <script src="index.js"></script>
+        function updateTotal() {
+            const total = {
+                water: 0,
+                starter: 0,
+                flour: 0,
+                salt: 0
+            };
+
+            for (const [bread, quantity] of Object.entries(quantities)) {
+                for (const [ingredient, amount] of Object.entries(baseIngredients)) {
+                    total[ingredient] += amount * quantity;
+                }
+            }
+
+            totalOutput.textContent = Object.entries(total)
+                .map(([ingredient, amount]) => `${ingredient}: ${amount}g`)
+                .join('\n');
+        }
+    </script>
 </body>
 </html>
